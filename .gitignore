@@ -35,3 +35,5 @@ node_modules
 /prisma/*.db
 /prisma/client
 /prisma/migrations
+
+.vscode
