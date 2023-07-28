@@ -1,3 +1,6 @@
+import { GetUserById } from "../../applications/GetUserById";
+import { PrismaConnection } from "../../infra/database/PrismaConnection";
+import UserRepositoryPrisma from "../../infra/database/repository/UserRepositoryPrisma";
 
 export class UserController{
     constructor(){
@@ -5,6 +8,9 @@ export class UserController{
     }
 
     async getUserById(){
-        return "ok"
+        const connection = new PrismaConnection().createConnection()
+        const userRepository = new UserRepositoryPrisma(connection)
+        const users = new GetUserById(userRepository)
+        return users
     }
 }

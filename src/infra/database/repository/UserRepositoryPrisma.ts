@@ -11,11 +11,20 @@ export default class UserRepositoryPrisma extends RepositoryDefault implements I
     ) {
         super();
     }
-    retrieveUser(input: any): Promise<User | null> {
-
-        throw new Error("Method not implemented.");
+    async retrieveUser(input?: any): Promise<any> {
+        try {
+            return await this.connection.user.findMany()
+        } catch (error: any) {
+            throw new DatabaseErrorException(
+                DEFINE_APP_ERROR.DATABASE_ERROR.message,
+                DEFINE_APP_ERROR.DATABASE_ERROR.app_error,
+                DEFINE_APP_ERROR.DATABASE_ERROR.status_code,
+                'IntegracaoRepositoryPrisma.createIntegracao',
+                error
+            );
+        }
     }
-    async createUser(user: User): Promise<void> {
+    async createUser(user: any): Promise<void> {
         try {
             await this.connection.user.create({
                 data: user
@@ -30,10 +39,35 @@ export default class UserRepositoryPrisma extends RepositoryDefault implements I
             );
         }
     }
-    updateUser(user: User): Promise<void> {
-        throw new Error("Method not implemented.");
+    async updateUser(user: any): Promise<void> {
+        try {
+            await this.connection.user.update({
+                where: { id: user.id },
+                data: user
+            })
+        } catch (error: any) {
+            throw new DatabaseErrorException(
+                DEFINE_APP_ERROR.DATABASE_ERROR.message,
+                DEFINE_APP_ERROR.DATABASE_ERROR.app_error,
+                DEFINE_APP_ERROR.DATABASE_ERROR.status_code,
+                'IntegracaoRepositoryPrisma.createIntegracao',
+                error
+            );
+        }
     }
-    deleteUser(userId: number): Promise<void> {
-        throw new Error("Method not implemented.");
+    async deleteUser(userId: number): Promise<void> {
+        try {
+            await this.connection.user.delete({
+                where: { id: userId}
+            })
+        } catch (error: any) {
+            throw new DatabaseErrorException(
+                DEFINE_APP_ERROR.DATABASE_ERROR.message,
+                DEFINE_APP_ERROR.DATABASE_ERROR.app_error,
+                DEFINE_APP_ERROR.DATABASE_ERROR.status_code,
+                'IntegracaoRepositoryPrisma.createIntegracao',
+                error
+            );
+        }
     }
 }
