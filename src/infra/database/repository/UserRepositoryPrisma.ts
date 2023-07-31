@@ -11,7 +11,7 @@ export default class UserRepositoryPrisma extends RepositoryDefault implements I
     ) {
         super();
     }
-    async retrieveUser(): Promise<any> {
+    async retrieveUser(): Promise<User[] | User> {
         try {
             return await this.connection.user.findMany()
         } catch (error: any) {
