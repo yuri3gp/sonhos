@@ -1,4 +1,4 @@
-import { GetUserById } from "../../applications/GetUserById";
+import { GetUserById } from "../../applications/GetUsers";
 import { PrismaConnection } from "../../infra/database/PrismaConnection";
 import UserRepositoryPrisma from "../../infra/database/repository/UserRepositoryPrisma";
 
