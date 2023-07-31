@@ -4,9 +4,9 @@ import { IHttpServerAdapter } from '../http/IHttpServerAdapter';
 export class UserRoutes {
 	constructor(readonly http_server: IHttpServerAdapter, readonly userController : UserController) {
 		this.http_server.createRouterGet({
-			url: '/user/:id',
+			url: '/users',
 			middleware: [],
-			callback: this.userController.getUserById.bind(this.userController),
+			callback: this.userController.getUsers.bind(this.userController),
 		});
 	}
 }
