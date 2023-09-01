@@ -6,7 +6,7 @@ export class UserRoutes {
 		this.http_server.createRouterGet({
 			url: '/users',
 			middleware: [],
-			callback: this.userController.getUsers.bind(this.userController),
+			callback: this.userController.findAll.bind(this.userController),
 		});
 	}
 }
