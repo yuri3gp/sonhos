@@ -1,4 +1,4 @@
-import { ReadyApi } from '../../applications/ReadyApi';
+import { ReadyApi } from '../../applications/util/ReadyApi';
 import { IHttpServerAdapter } from '../http/IHttpServerAdapter';
 
 export class ReadyController {
