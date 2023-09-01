@@ -15,7 +15,7 @@ model User {
   name     String
   email    String     @unique
   password String
-  createdAt DateTime   @default(now())
+  created_at DateTime   @default(now())
   dreams   Dream[]
 }
 
@@ -26,8 +26,8 @@ model Dream {
   drawing   String?
   date      DateTime   @default(now())
   keywords  Keyword[]
-  userId    Int
-  user      User       @relation(fields: [userId], references: [id])
+  user_id    Int
+  user      User       @relation(fields: [user_id], references: [id])
 }
 
 model Keyword {
