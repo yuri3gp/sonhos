@@ -1,39 +1,35 @@
+# compiled output
+/dist
+/node_modules
+
 # Logs
 logs
 *.log
 npm-debug.log*
+pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+lerna-debug.log*
 
-# Arquivos de compilação
-dist
-build
-
-# Dependências
-node_modules
-
-# Arquivos de ambiente
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# Cache e arquivos temporários
-*.swp
-*.tmp
-
-# Arquivos de configuração
+# OS
 .DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
 
-# Arquivos gerados pelo Prisma
-/prisma/.env
-/prisma/*.db
-/prisma/client
-/prisma/migrations
+# Tests
+/coverage
+/.nyc_output
 
-.vscode
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
