@@ -55,4 +55,11 @@ export class UserController {
     };
     return this.userService.deleteUser(userWhereUniqueInput);
   }
+
+  @Post('login')
+  async login(@Body() body: { email: string; password: string }): Promise<{ id: number }> {
+    const { email, password } = body;
+    const user = await this.userService.loginUser(email, password);
+    return user;
+  }
 }
