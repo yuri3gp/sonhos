@@ -33,21 +33,16 @@ export class UserService {
   }
 
   async createUser(data: Prisma.UserCreateInput): Promise<User> {
-    // Criptografar a senha antes de salvar no banco de dados
     const hashedPassword = await bcrypt.hash(data.password, 10);
-
-    // Substituir a senha no objeto de dados pelo hash criptografado
     const userDataWithHashedPassword: Prisma.UserCreateInput = {
       ...data,
       password: hashedPassword,
     };
-
     try {
       return this.prisma.user.create({
         data: userDataWithHashedPassword,
       });
     } catch (error) {
-      // Trate erros específicos, se necessário
       throw new BadRequestException('Erro ao criar o usuário.');
     }
   }
