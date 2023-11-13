@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,8 +8,36 @@ datasource db {
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
-  name     String
-  email    String
-  password String
+  id                    Int      @default(autoincrement()) @id
+  email                 String   @unique
+  name                  String?
+  password              String
+  dreams                Dream[]
 }
+
+model Dream {
+  id                    Int      @default(autoincrement()) @id
+  title                 String
+  story                 String?
+  weather               String
+  time                  String
+  knownPeople           String
+  knownPeopleWho        String
+  knownPeopleSubject    String
+  unknownPeople         String
+  unknownPeopleName     String
+  unknownPeopleSubject  String
+  differentItems        String
+  differentBuildings    String
+  experiencedSensations String
+  personalMeaning       String
+  otherObservations     String
+  lucidityLevel         String
+  emotions              String
+  actions               String
+  creationDate          DateTime  @default(now())
+  published             Boolean  @default(false)
+  author                User?    @relation(fields: [authorId], references: [id])
+  authorId              Int?
+}
+

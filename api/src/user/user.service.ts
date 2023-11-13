@@ -1,54 +1,71 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client'; // Importe o Prisma Client
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { Injectable, BadRequestException } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { User, Prisma } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
-  private readonly prisma = new PrismaClient(); // Crie uma instância do Prisma Client
+  constructor(private prisma: PrismaService) {}
 
-  async create(createUserDto: CreateUserDto) {
-    const { name, email, password } = createUserDto;
-    const newUser = await this.prisma.user.create({
-      data: {
-        name,
-        email,
-        password,
-      },
+  async user(
+    userWhereUniqueInput: Prisma.UserWhereUniqueInput,
+  ): Promise<User | null> {
+    return this.prisma.user.findUnique({
+      where: userWhereUniqueInput,
     });
-    return newUser;
   }
 
-  async findAll() {
-    const users = await this.prisma.user.findMany();
-    return users;
+  async users(params: {
+    skip?: number;
+    take?: number;
+    cursor?: Prisma.UserWhereUniqueInput;
+    where?: Prisma.UserWhereInput;
+    orderBy?: Prisma.UserOrderByWithRelationInput;
+  }): Promise<User[]> {
+    const { skip, take, cursor, where, orderBy } = params;
+    return this.prisma.user.findMany({
+      skip,
+      take,
+      cursor,
+      where,
+      orderBy,
+    });
   }
 
-  async findOne(id: number) {
-    const user = await this.prisma.user.findUnique({
-      where: { id },
-    });
-    return user;
+  async createUser(data: Prisma.UserCreateInput): Promise<User> {
+    // Criptografar a senha antes de salvar no banco de dados
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+
+    // Substituir a senha no objeto de dados pelo hash criptografado
+    const userDataWithHashedPassword: Prisma.UserCreateInput = {
+      ...data,
+      password: hashedPassword,
+    };
+
+    try {
+      return this.prisma.user.create({
+        data: userDataWithHashedPassword,
+      });
+    } catch (error) {
+      // Trate erros específicos, se necessário
+      throw new BadRequestException('Erro ao criar o usuário.');
+    }
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
-    const { name, email, password } = updateUserDto;
-    const updatedUser = await this.prisma.user.update({
-      where: { id },
-      data: {
-        name,
-        email,
-        password,
-      },
+  async updateUser(params: {
+    where: Prisma.UserWhereUniqueInput;
+    data: Prisma.UserUpdateInput;
+  }): Promise<User> {
+    const { where, data } = params;
+    return this.prisma.user.update({
+      data,
+      where,
     });
-
-    return updatedUser;
   }
 
-  async remove(id: number) {
-    const deletedUser = await this.prisma.user.delete({
-      where: { id },
+  async deleteUser(where: Prisma.UserWhereUniqueInput): Promise<User> {
+    return this.prisma.user.delete({
+      where,
     });
-    return deletedUser;
   }
 }

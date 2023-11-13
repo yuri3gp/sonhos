@@ -1,34 +1,58 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Put,
+  Delete,
+} from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { User as UserModel, Prisma } from '@prisma/client';
 
-@Controller('user')
+@Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  @Get(':id')
+  async getUser(@Param('id') id: string): Promise<UserModel | null> {
+    const userWhereUniqueInput: Prisma.UserWhereUniqueInput = {
+      id: parseInt(id, 10),
+    };
+    return this.userService.user(userWhereUniqueInput);
   }
 
   @Get()
-  findAll() {
-    return this.userService.findAll();
+  async getUsers(): Promise<UserModel[]> {
+    return this.userService.users({});
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+  @Post()
+  async createUser(
+    @Body() userData: Prisma.UserCreateInput,
+  ): Promise<UserModel> {
+    return this.userService.createUser(userData);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+  @Put(':id')
+  async updateUser(
+    @Param('id') id: string,
+    @Body() userData: Prisma.UserUpdateInput,
+  ): Promise<UserModel> {
+    const userWhereUniqueInput: Prisma.UserWhereUniqueInput = {
+      id: parseInt(id, 10),
+    };
+    return this.userService.updateUser({
+      where: userWhereUniqueInput,
+      data: userData,
+    });
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+  async deleteUser(@Param('id') id: string): Promise<UserModel> {
+    const userWhereUniqueInput: Prisma.UserWhereUniqueInput = {
+      id: parseInt(id, 10),
+    };
+    return this.userService.deleteUser(userWhereUniqueInput);
   }
 }
